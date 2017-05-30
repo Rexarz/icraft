@@ -52,7 +52,7 @@ public class ScreenRenderer {
 
 
                         if (mapGenerator.grid.get(i, j) > 0f) {
-                            sprites.get(objectCounter).setPosition((float) i * 15, (float) j * 15);
+                            sprites.get(objectCounter).setPosition((float) i * 2, (float) j * 2);
                             sprites.get(objectCounter).draw(batch);
                             objectCounter++;
                         }
@@ -63,17 +63,12 @@ public class ScreenRenderer {
             }
         }
         System.out.println(objectCounter);
-        for (int i = 0; i < 10000; i++) {
-//            sprites.get(i).setPosition(i * (17 - 2) ,10);
-//            sprites.get(i).draw(batch);
-        }
-
     }
 
     public void generateSprites() {
         for (int i = 0; i < 300000; i++) {
             Sprite sprite = new Sprite(new TextureRegion(AssetsManager.sprites, 69, 0, 17, 17));
-            sprite.setBounds(0, 0, 17f, 17f);
+            sprite.setBounds(0, 0, 2f, 2f);
             sprites.add(sprite);
         }
     }
