@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.rexar.islandcraft.utils.AssetsManager;
@@ -13,6 +14,8 @@ import com.rexar.islandcraft.utils.AssetsManager;
  * Created by sergei.ivanishin on 5/29/2017.
  */
 public class Player extends Sprite {
+
+    public Rectangle playerBounds;
 
 
     private Animation<TextureRegion> playerRun;
@@ -55,6 +58,7 @@ public class Player extends Sprite {
         currentState = PlayerStates.IDLE;
         previousState = PlayerStates.IDLE;
 
+        playerBounds = new Rectangle(0,0,17,17);
 
         defineAnimations();
 
@@ -129,7 +133,13 @@ public class Player extends Sprite {
 
     public void update(float delta) {
 
+        playerBounds.setPosition(position);
 
+
+
+
+
+        System.out.println(position);
         stateTime += Gdx.graphics.getDeltaTime();
         setPosition(position.x, position.y);
         playerMovements();

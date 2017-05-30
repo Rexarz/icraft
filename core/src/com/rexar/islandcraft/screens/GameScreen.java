@@ -5,7 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rexar.islandcraft.ICraft;
@@ -21,6 +24,7 @@ public class GameScreen implements Screen {
 
 
     private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
     private OrthographicCamera gameCam;
     private Viewport viewport;
     private ICraft game;
@@ -29,12 +33,15 @@ public class GameScreen implements Screen {
     private Player player;
 
 
+    private Sprite wall;
+
+
     private Texture texture;
 
     public GameScreen(ICraft game) {
         this.game = game;
 
-
+        shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         gameCam = new OrthographicCamera();
         viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, gameCam);
@@ -45,9 +52,13 @@ public class GameScreen implements Screen {
 
         player = new Player(0, 0);
 
+        wall = new Sprite();
+        wall.setRegion(new TextureRegion(AssetsManager.sprites, 69, 0, 17, 17));
+        wall.setBounds(0, 0, 20, 20);
+        wall.setPosition(30, 30);
+
 
         MapGenerator.mapGenerate();
-
 
 
     }
@@ -57,7 +68,7 @@ public class GameScreen implements Screen {
 
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         player.update(delta);
     }
 
@@ -68,13 +79,23 @@ public class GameScreen implements Screen {
 
         update(delta);
         gameCam.update();
+
+        shapeRenderer.setAutoShapeType(true);
+        shapeRenderer.setProjectionMatrix(gameCam.combined);
+        shapeRenderer.begin();
+        shapeRenderer.rect(player.playerBounds.x, player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
+        shapeRenderer.end();
+
+
         batch.setProjectionMatrix(gameCam.combined);
         batch.begin();
 
 
 //        batch.draw(new TextureRegion(AssetsManager.sprites, 0, 0, 17, 17), 0, 0);
 //        new Sprite(new TextureRegion(AssetsManager.sprites, 0, 0, 17, 17).getTexture(),0,0).draw(batch);
+
         player.draw(batch);
+        wall.draw(batch);
         batch.end();
 
 
