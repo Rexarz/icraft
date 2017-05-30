@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rexar.islandcraft.ICraft;
@@ -16,6 +17,7 @@ import com.rexar.islandcraft.gameobjects.Player;
 import com.rexar.islandcraft.utils.AssetsManager;
 import com.rexar.islandcraft.utils.Constants;
 import com.rexar.islandcraft.utils.MapGenerator;
+import com.rexar.islandcraft.utils.ScreenRenderer;
 
 /**
  * Created by rexar on 26.05.17.
@@ -34,6 +36,10 @@ public class GameScreen implements Screen {
 
 
     private Sprite wall;
+    private Rectangle wallRect;
+
+    private MapGenerator mapGenerator;
+    private ScreenRenderer renderer;
 
 
     private Texture texture;
@@ -56,10 +62,14 @@ public class GameScreen implements Screen {
         wall.setRegion(new TextureRegion(AssetsManager.sprites, 69, 0, 17, 17));
         wall.setBounds(0, 0, 20, 20);
         wall.setPosition(30, 30);
+        wallRect = new Rectangle(0, 0, 20, 20);
+
+        mapGenerator = new MapGenerator();
 
 
-        MapGenerator.mapGenerate();
+        mapGenerator.mapGenerate();
 
+        renderer = new ScreenRenderer(player,mapGenerator,viewport,gameCam);
 
     }
 
@@ -75,30 +85,34 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(1, 0, 0, 1);
-
+        Gdx.gl.glClearColor(0, 0, 1, 1);
+        gameCam.position.set(player.position.x, player.position.y, 0);
         update(delta);
         gameCam.update();
 
-        shapeRenderer.setAutoShapeType(true);
-        shapeRenderer.setProjectionMatrix(gameCam.combined);
-        shapeRenderer.begin();
-        shapeRenderer.rect(player.playerBounds.x, player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
-        shapeRenderer.end();
+//        shapeRenderer.setAutoShapeType(true);
+//        shapeRenderer.setProjectionMatrix(gameCam.combined);
+//        shapeRenderer.begin();
+//        shapeRenderer.rect(player.playerBounds.x, player.playerBounds.y, player.playerBounds.width, player.playerBounds.height);
+//        shapeRenderer.rect(wallRect.x, wallRect.y, wallRect.width, wallRect.height);
+//        shapeRenderer.end();
 
 
         batch.setProjectionMatrix(gameCam.combined);
         batch.begin();
 
-
 //        batch.draw(new TextureRegion(AssetsManager.sprites, 0, 0, 17, 17), 0, 0);
 //        new Sprite(new TextureRegion(AssetsManager.sprites, 0, 0, 17, 17).getTexture(),0,0).draw(batch);
 
+        renderer.draw(batch);
+
         player.draw(batch);
-        wall.draw(batch);
+//        wall.draw(batch);
         batch.end();
 
-
+//        System.out.println(viewport.getWorldWidth());
+//        System.out.println(viewport.getWorldHeight());
+//        System.out.println(gameCam.position);
     }
 
 

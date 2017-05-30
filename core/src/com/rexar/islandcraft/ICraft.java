@@ -23,7 +23,7 @@ public class ICraft extends Game {
 
 //    @Override
 //    public void create() {
-//        final Pixmap map = new Pixmap(768, 768, Pixmap.Format.RGBA8888);
+//        final Pixmap grid = new Pixmap(768, 768, Pixmap.Format.RGBA8888);
 //        final Grid grid = new Grid(768);
 //
 //        final NoiseGenerator noiseGenerator = new NoiseGenerator();
@@ -40,20 +40,20 @@ public class ICraft extends Game {
 //                if (cell > 0.3f + (0.4f * distanceSquared(x, y, grid))) {
 //                    if (cell > 0.5) {
 //                        if (cell > 0.61f) {
-//                            map.drawPixel(x, y, Color.rgba8888(0, cell - 0.2f, 0, 1));
+//                            grid.drawPixel(x, y, Color.rgba8888(0, cell - 0.2f, 0, 1));
 //                        } else
-//                            map.drawPixel(x, y, Color.rgba8888(0, cell, 0, 1));
+//                            grid.drawPixel(x, y, Color.rgba8888(0, cell, 0, 1));
 //                    } else {
-//                        map.drawPixel(x, y, Color.rgba8888(cell, cell, 0, 1));
+//                        grid.drawPixel(x, y, Color.rgba8888(cell, cell, 0, 1));
 //                    }
 //                } else {
 //                    grid.set(x, y, 0f);
-//                    map.drawPixel(x, y, Color.rgba8888(0, 0, cell, 1));
+//                    grid.drawPixel(x, y, Color.rgba8888(0, 0, cell, 1));
 //                }
 //            }
 //        }
 //
-//        texture = new Texture(map);
+//        texture = new Texture(grid);
 //        batch = new SpriteBatch();
 //
 //
@@ -61,7 +61,7 @@ public class ICraft extends Game {
 //        PixmapIO.writePNG(FileHandle.tempFile("mapNew.png"), print);
 //
 //
-//        map.dispose();
+//        grid.dispose();
 //    }
 
     private static float distanceSquared(int x, int y, Grid grid) {
@@ -76,7 +76,7 @@ public class ICraft extends Game {
         noiseGenerator.setRadius(radius);
         noiseGenerator.setModifier(modifier);
         // Seed ensures randomness, can be saved if you feel the need to
-        // generate the same map in the future.
+        // generate the same grid in the future.
         noiseGenerator.setSeed(Generators.rollSeed());
         noiseGenerator.generate(grid);
     }
