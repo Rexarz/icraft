@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.rexar.islandcraft.utils.AssetsManager;
+import com.rexar.islandcraft.utils.Constants;
 
 /**
  * Created by sergei.ivanishin on 5/29/2017.
@@ -38,6 +39,9 @@ public class Player extends Sprite {
     private TextureRegion playerStay;
 
 
+    private final float VELOCITY = 1f;
+
+
     private enum PlayerStates {
         IDLE,
         RUNNING_R,
@@ -55,12 +59,12 @@ public class Player extends Sprite {
 
 
         setRegion(new TextureRegion(AssetsManager.sprites, 17, 17));
-        setBounds(0, 0, 17, 17);
+        setBounds(0f, 0f, 2f,2f);
         setPosition(x, y);
         currentState = PlayerStates.IDLE;
         previousState = PlayerStates.IDLE;
 
-        playerBounds = new Rectangle(0,0,17,17);
+        playerBounds = new Rectangle(0,0,17f / 100f,17f / 100f);
 
         defineAnimations();
 
@@ -109,11 +113,11 @@ public class Player extends Sprite {
 
     public void playerMovements(){
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            position.x += 1f;
+            position.x += VELOCITY;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            position.x -= 1f;
+            position.x -= VELOCITY;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
             if (isFlipX()) {
 
@@ -122,11 +126,11 @@ public class Player extends Sprite {
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            position.y += 1f;
+            position.y += VELOCITY;
             setRegion(playerRunUp.getKeyFrame(stateTime, true));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            position.y -= 1f;
+            position.y -= VELOCITY;
             setRegion(playerRunDown.getKeyFrame(stateTime, true));
         }
     }

@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
+import com.rexar.islandcraft.objects.Tree;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by sergei.ivanishin on 5/29/2017.
@@ -14,13 +18,21 @@ import com.github.czyzby.noise4j.map.generator.util.Generators;
 public class MapGenerator {
 
     public Grid grid;
-    public Texture[][] tileMap;
+    public Sprite[][] map;
+    public ArrayList<Tree> trees;
+
+    Random random = new Random();
 
     public MapGenerator() {
         grid = new Grid(512);
+        map = new Sprite[512][512];
+        trees = new ArrayList<Tree>();
     }
 
     public void mapGenerate() {
+
+        int treeCounter = 0;
+
 
         final NoiseGenerator noiseGenerator = new NoiseGenerator();
         noiseStage(grid, noiseGenerator, 32, 0.6f);
@@ -34,13 +46,20 @@ public class MapGenerator {
             for (int y = 0; y < grid.getHeight(); y++) {
                 final float cell = grid.get(x, y);
                 if (cell > 0.3f + (0.4f * distanceSquared(x, y, grid))) {
+                    if (cell > 0.48f && cell < 0.55f) {
+                        if (random.nextFloat() > 0.8f) {
+                            Tree tree = new Tree(AssetsManager.sprites, 103, 1, 33, 33, x, y);
+                            trees.add(tree);
+                            treeCounter++;
+                        }
+                    }
                 } else {
                     grid.set(x, y, 0f);
                 }
             }
         }
 
-
+        System.out.println(treeCounter);
     }
 
     private static float distanceSquared(int x, int y, Grid grid) {

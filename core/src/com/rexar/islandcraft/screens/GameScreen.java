@@ -35,9 +35,6 @@ public class GameScreen implements Screen {
     private Player player;
 
 
-    private Sprite wall;
-    private Rectangle wallRect;
-
     private MapGenerator mapGenerator;
     private ScreenRenderer renderer;
 
@@ -50,26 +47,17 @@ public class GameScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         gameCam = new OrthographicCamera();
-        viewport = new FitViewport(Constants.V_WIDTH, Constants.V_HEIGHT, gameCam);
+        viewport = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gameCam);
 
 
-        texture = new Texture("badlogic.jpg");
-
-
-        player = new Player(0, 0);
-
-        wall = new Sprite();
-        wall.setRegion(new TextureRegion(AssetsManager.sprites, 69, 0, 17, 17));
-        wall.setBounds(0, 0, 20, 20);
-        wall.setPosition(30, 30);
-        wallRect = new Rectangle(0, 0, 20, 20);
+        player = new Player(100, 100);
 
         mapGenerator = new MapGenerator();
 
 
         mapGenerator.mapGenerate();
 
-        renderer = new ScreenRenderer(player,mapGenerator,viewport,gameCam);
+        renderer = new ScreenRenderer(player, mapGenerator, viewport, gameCam);
 
     }
 
@@ -85,7 +73,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0, 0, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0.3f, 1);
         gameCam.position.set(player.position.x, player.position.y, 0);
         update(delta);
         gameCam.update();
