@@ -1,9 +1,6 @@
 package com.rexar.islandcraft.utils;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
@@ -47,7 +44,9 @@ public class MapGenerator {
                 final float cell = grid.get(x, y);
                 if (cell > 0.3f + (0.4f * distanceSquared(x, y, grid))) {
                     if (cell > 0.48f && cell < 0.55f) {
-                        if (random.nextFloat() > 0.8f) {
+                        float rand = random.nextFloat();
+                        System.out.println(rand);
+                        if (rand < 0.2f) {
                             Tree tree = new Tree(AssetsManager.sprites, 103, 1, 33, 33, x, y);
                             trees.add(tree);
                             treeCounter++;

@@ -65,42 +65,86 @@ public class ScreenRenderer {
 //                }
 //            }
 //        }
+        for (int i = (int) upBorderY; i > downBorderY; i--) {
+            for (int j = (int) leftBorderX; j < rightBorderX; j++) {
 
-        for (int i = (int) rightBorderX; i > leftBorderX; i--) {
-            for (int j = (int) upBorderY; j > downBorderY; j--) {
-                offsetX = i * 8f;
-                offsetY = j * 8f;
-                if (i >= 0 && i <= mapGenerator.grid.getWidth() && j >= 0 && j <= mapGenerator.grid.getHeight() && mapGenerator.grid.get(i, j) > 0f) {
+                if (j >= 0 && j <= mapGenerator.grid.getWidth() && i >= 0 && i <= mapGenerator.grid.getHeight() && mapGenerator.grid.get(j, i) > 0f) {
 
 
-
-
-
-                    sprites.get(objectCounter).setPosition((float) i, (float) j);
-                    if (mapGenerator.grid.get(i, j) > 0.65f){
-                        sprites.get(objectCounter).setColor(mapGenerator.grid.get(i, j),mapGenerator.grid.get(i, j),  mapGenerator.grid.get(i, j), 1);
-                    }else if (mapGenerator.grid.get(i, j) > 0.48f) {
-                        sprites.get(objectCounter).setColor(0, mapGenerator.grid.get(i, j), 0, 1);
-                    } else if (mapGenerator.grid.get(i, j) > 0.1f) {
-                        sprites.get(objectCounter).setColor(mapGenerator.grid.get(i, j), mapGenerator.grid.get(i, j), 0, 1);
+                    sprites.get(objectCounter).setPosition((float) j, (float) i);
+                    if (mapGenerator.grid.get(j, i) > 0.65f) {
+                        sprites.get(objectCounter).setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 1);
+                    } else if (mapGenerator.grid.get(j, i) > 0.48f) {
+                        sprites.get(objectCounter).setColor(0, mapGenerator.grid.get(j, i), 0, 1);
+                    } else if (mapGenerator.grid.get(j, i) > 0.1f) {
+                        sprites.get(objectCounter).setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 0, 1);
                     }
 
                     sprites.get(objectCounter).draw(batch);
                     objectCounter++;
 
-
                 }
 
-                if (mapGenerator.grid.get(i,j) > 0.48f && mapGenerator.grid.get(i,j) < 0.55f){
-                    mapGenerator.trees.get(treesCounter).setPosition(i,j);
-                    mapGenerator.trees.get(treesCounter).draw(batch);
-                    treesCounter++;
-                }
+//                if (mapGenerator.grid.get(j, i) > 0.48f && mapGenerator.grid.get(j, i) < 0.55f) {
+//                    mapGenerator.trees.get(treesCounter).setPosition(j, i);
+//                    mapGenerator.trees.get(treesCounter).draw(batch);
+//                    treesCounter++;
+//                }
 
-//                draw(sprites.get(0).setPosition(i,j));
 
             }
         }
+
+        for (int i = (int) upBorderY; i > downBorderY; i--) {
+            for (int j = (int) leftBorderX; j < rightBorderX; j++) {
+                if (j >= 0 && j <= mapGenerator.grid.getWidth() && i >= 0 && i <= mapGenerator.grid.getHeight() && mapGenerator.grid.get(j, i) > 0f) {
+                    try {
+
+
+                        if (mapGenerator.grid.get(j, i) > 0.48f && mapGenerator.grid.get(j, i) < 0.55f) {
+                            mapGenerator.trees.get(treesCounter).setPosition(j - 2f, i - 2f);
+                            mapGenerator.trees.get(treesCounter).draw(batch);
+                            treesCounter++;
+                        }
+
+                    }catch (IndexOutOfBoundsException e){
+                        System.out.println("NO TREES IN ARRAY!!!");
+                    }
+
+                }
+            }
+        }
+
+
+//        for (int i = (int) rightBorderX; i > leftBorderX; i--) {
+//            for (int j = (int) upBorderY; j > downBorderY; j--) {
+//                offsetX = i * 8f;
+//                offsetY = j * 8f;
+//                if (i >= 0 && i <= mapGenerator.grid.getWidth() && j >= 0 && j <= mapGenerator.grid.getHeight() && mapGenerator.grid.get(i, j) > 0f) {
+//
+//                    sprites.get(objectCounter).setPosition((float) i, (float) j);
+//                    if (mapGenerator.grid.get(i, j) > 0.65f){
+//                        sprites.get(objectCounter).setColor(mapGenerator.grid.get(i, j),mapGenerator.grid.get(i, j),  mapGenerator.grid.get(i, j), 1);
+//                    }else if (mapGenerator.grid.get(i, j) > 0.48f) {
+//                        sprites.get(objectCounter).setColor(0, mapGenerator.grid.get(i, j), 0, 1);
+//                    } else if (mapGenerator.grid.get(i, j) > 0.1f) {
+//                        sprites.get(objectCounter).setColor(mapGenerator.grid.get(i, j), mapGenerator.grid.get(i, j), 0, 1);
+//                    }
+//
+//                    sprites.get(objectCounter).draw(batch);
+//                    objectCounter++;
+//
+//
+//                }
+//
+//                if (mapGenerator.grid.get(i,j) > 0.48f && mapGenerator.grid.get(i,j) < 0.55f){
+//                    mapGenerator.trees.get(treesCounter).setPosition(i,j);
+//                    mapGenerator.trees.get(treesCounter).draw(batch);
+//                    treesCounter++;
+//                }
+//
+//            }
+//        }
 
 //        System.out.println(objectCounter);
 
