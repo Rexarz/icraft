@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.rexar.islandcraft.objects.Tree;
 import com.rexar.islandcraft.utils.AssetsManager;
+import com.rexar.islandcraft.utils.MapGenerator;
 
 /**
  * Created by sergei.ivanishin on 5/29/2017.
@@ -16,7 +18,6 @@ import com.rexar.islandcraft.utils.AssetsManager;
 public class Player extends Sprite {
 
     public Rectangle playerBounds;
-
 
 
     private Animation<TextureRegion> playerRun;
@@ -36,8 +37,16 @@ public class Player extends Sprite {
 
     private TextureRegion playerStay;
 
+    private MapGenerator mapGenerator;
 
-    private final float VELOCITY = 0.5f;
+
+    private final float VELOCITY = 0.2f;
+
+
+    private boolean canWalkUp = true;
+    private boolean canWalkDown = true;
+    private boolean canWalkLeft = true;
+    private boolean canWalkRight = true;
 
 
     private enum PlayerStates {
@@ -49,20 +58,22 @@ public class Player extends Sprite {
     }
 
 
-    public Player(float x, float y) {
+    public Player(float x, float y, MapGenerator mapGenerator) {
         stateTime = 0;
+
+        this.mapGenerator = mapGenerator;
 
 
         this.position = new Vector2(x, y);
 
 
         setRegion(new TextureRegion(AssetsManager.sprites, 17, 17));
-        setBounds(0f, 0f, 2f,2f);
+        setBounds(0f, 0f, 2f, 2f);
         setPosition(x, y);
         currentState = PlayerStates.IDLE;
         previousState = PlayerStates.IDLE;
 
-        playerBounds = new Rectangle(0,0,17f / 100f,17f / 100f);
+        playerBounds = new Rectangle(0, 0, 17f / 100f, 17f / 100f);
 
         defineAnimations();
 
@@ -109,12 +120,12 @@ public class Player extends Sprite {
 
     }
 
-    public void playerMovements(){
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+    public void playerMovements() {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && canWalkRight) {
             position.x += VELOCITY;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && canWalkLeft) {
             position.x -= VELOCITY;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
             if (isFlipX()) {
@@ -123,17 +134,15 @@ public class Player extends Sprite {
                 flip(true, false);
             }
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && canWalkUp) {
             position.y += VELOCITY;
             setRegion(playerRunUp.getKeyFrame(stateTime, true));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && canWalkDown) {
             position.y -= VELOCITY;
             setRegion(playerRunDown.getKeyFrame(stateTime, true));
         }
     }
-
-
 
     public void update(float delta) {
 
@@ -141,11 +150,28 @@ public class Player extends Sprite {
 
         stateTime += Gdx.graphics.getDeltaTime();
         setPosition(position.x, position.y);
+
+
+        if (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] != 0) {
+            canWalkUp = false;
+        } else if (mapGenerator.objects[(int) position.x][(int) (position.y - 1)] != 0) {
+            canWalkDown = false;
+        } else if (mapGenerator.objects[(int) position.x + 1][(int) (position.y)] != 0) {
+            canWalkRight = false;
+        } else if (mapGenerator.objects[(int) position.x - 1][(int) (position.y)] != 0) {
+            canWalkLeft = false;
+        }else if (mapGenerator.objects[(int) position.x][(int) (position.y - 1)] == 0) {
+            canWalkDown = true;
+        } else if (mapGenerator.objects[(int) position.x + 1][(int) (position.y)] == 0) {
+            canWalkRight = true;
+        } else if (mapGenerator.objects[(int) position.x - 1][(int) (position.y)] == 0) {
+            canWalkLeft = true;
+        } else if (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] == 0) {
+            canWalkUp = true;
+        }
+
         playerMovements();
-
-
     }
-
 
 
 }

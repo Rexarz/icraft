@@ -1,12 +1,16 @@
 package com.rexar.islandcraft.utils;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.Gdx;
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
+import com.rexar.islandcraft.objects.Flower;
+import com.rexar.islandcraft.objects.Stone;
+import com.rexar.islandcraft.objects.Tile;
 import com.rexar.islandcraft.objects.Tree;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -14,21 +18,61 @@ import java.util.Random;
  */
 public class MapGenerator {
 
+    //    GROUND
+    public List<Tile> grounds;
+
+
+    //    TREES
+    public List<Tree> treesType_0;
+    public List<Tree> treesType_1;
+
+    //    STONES
+    public List<Stone> stoneType_0;
+    public List<Stone> stoneType_1;
+
+    //    FLOWERS
+    public List<Flower> flowerType_0;
+
+
     public Grid grid;
-    public Sprite[][] map;
-    public ArrayList<Tree> trees;
+    public float[][] map;
+    public int[][] objects;
+
+    private int objectsCounter;
 
     Random random = new Random();
 
     public MapGenerator() {
-        grid = new Grid(512);
-        map = new Sprite[512][512];
-        trees = new ArrayList<Tree>();
+//        GROUND
+        grounds = new ArrayList<Tile>();
+
+
+//        TREES
+        treesType_0 = new ArrayList<Tree>();
+        treesType_1 = new ArrayList<Tree>();
+
+//        STONES
+        stoneType_0 = new ArrayList<Stone>();
+        stoneType_1 = new ArrayList<Stone>();
+
+//        FLOWERS
+        flowerType_0 = new ArrayList<Flower>();
+
+//        OTHER
+        grid = new Grid(Constants.MAP_SIZE);
+        map = new float[Constants.MAP_SIZE][Constants.MAP_SIZE];
+        objects = new int[Constants.MAP_SIZE][Constants.MAP_SIZE];
+        objectsCounter = 0;
     }
 
     public void mapGenerate() {
 
-        int treeCounter = 0;
+        for (int i = 0; i < objects.length; i++) {
+            for (int j = 0; j < objects[i].length; j++) {
+                objects[i][j] = 0;
+                map[i][j] = 0;
+            }
+        }
 
 
         final NoiseGenerator noiseGenerator = new NoiseGenerator();
@@ -43,28 +87,76 @@ public class MapGenerator {
             for (int y = 0; y < grid.getHeight(); y++) {
                 final float cell = grid.get(x, y);
                 if (cell > 0.3f + (0.4f * distanceSquared(x, y, grid))) {
-                    if (cell > 0.48f && cell < 0.55f) {
-                        float rand = random.nextFloat();
-                        System.out.println(rand);
-                        if (rand < 0.2f) {
-                            Tree tree = new Tree(AssetsManager.sprites, 103, 1, 33, 33, x, y);
-                            trees.add(tree);
-                            treeCounter++;
-                        }
-                    }
+                    map[x][y] = cell;
+                    generateGround(x, y);
+                    generateForest(x, y);
                 } else {
                     grid.set(x, y, 0f);
+                    map[x][y] = 0f;
                 }
             }
         }
 
-        System.out.println(treeCounter);
+        Gdx.app.log("Map", "Map generation done successfully");
     }
 
     private static float distanceSquared(int x, int y, Grid grid) {
         float dx = 2f * x / grid.getWidth() - 1f;
         float dy = 2f * y / grid.getHeight() - 1f;
         return dx * dx + dy * dy;
+    }
+
+    private void generateGround(int x, int y) {
+        float rand = random.nextFloat();
+        final float cell = grid.get(x, y);
+        Tile tile = null;
+        if (rand > 0.6f) {
+            tile = new Tile(AssetsManager.sprites, 69, 1, 8, 8, x, y);
+        } else if (rand > 0.3f) {
+            tile = new Tile(AssetsManager.sprites, 77, 1, 8, 8, x, y);
+        } else if (rand > 0f) {
+            tile = new Tile(AssetsManager.sprites, 69, 9, 8, 8, x, y);
+        }
+        grounds.add(tile);
+    }
+
+    private void generateForest(int x, int y) {
+        float rand = random.nextFloat();
+        final float cell = grid.get(x, y);
+        if (cell > 0.5f && cell < 0.55f) {
+            if (rand < 0.2f) {
+                Tree tree = new Tree(AssetsManager.sprites, 103, 1, 33, 33, x, y);
+                treesType_0.add(tree);
+                objects[x][y] = 1;
+                objectsCounter++;
+            }
+        } else if (cell > 0.48f && cell < 0.50f) {
+            if (rand < 0.1f) {
+                Tree tree = new Tree(AssetsManager.sprites, 103, 35, 33, 33, x, y);
+                treesType_1.add(tree);
+                objects[x][y] = 2;
+                objectsCounter++;
+            }
+        } else if (cell > 0.65f) {
+            if (rand < 0.2f) {
+                Stone stone = new Stone(AssetsManager.sprites, 137, 1, 10, 10, x, y);
+                stoneType_0.add(stone);
+                objects[x][y] = 3;
+                objectsCounter++;
+            } else if (rand < 0.3f) {
+                Stone stone = new Stone(AssetsManager.sprites, 154, 1, 10, 10, x, y);
+                stoneType_1.add(stone);
+                objects[x][y] = 4;
+                objectsCounter++;
+            }
+        } else if (cell > 0.55f && cell < 0.6f) {
+            if (rand < 0.1f) {
+                Flower flower = new Flower(AssetsManager.sprites, 137, 18, 7, 4, x, y);
+                flowerType_0.add(flower);
+                objects[x][y] = 5;
+                objectsCounter++;
+            }
+        }
     }
 
 

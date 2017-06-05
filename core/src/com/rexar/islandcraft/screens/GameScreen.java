@@ -50,12 +50,14 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gameCam);
 
 
-        player = new Player(100, 100);
+
 
         mapGenerator = new MapGenerator();
 
 
         mapGenerator.mapGenerate();
+
+        player = new Player(100, 100, mapGenerator);
 
         renderer = new ScreenRenderer(player, mapGenerator, viewport, gameCam);
 
@@ -94,7 +96,7 @@ public class GameScreen implements Screen {
 
         renderer.draw(batch);
 
-        player.draw(batch);
+//        player.draw(batch);
 //        wall.draw(batch);
         batch.end();
 
