@@ -5,19 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rexar.islandcraft.ICraft;
 import com.rexar.islandcraft.gameobjects.Player;
-import com.rexar.islandcraft.utils.AssetsManager;
-import com.rexar.islandcraft.utils.Constants;
-import com.rexar.islandcraft.utils.MapGenerator;
-import com.rexar.islandcraft.utils.ScreenRenderer;
+import com.rexar.islandcraft.utils.*;
 
 /**
  * Created by rexar on 26.05.17.
@@ -30,6 +24,7 @@ public class GameScreen implements Screen {
     private OrthographicCamera gameCam;
     private Viewport viewport;
     private ICraft game;
+    private ControllListener controllListener;
 
     private AssetsManager assetsManager;
     private Player player;
@@ -50,8 +45,6 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(Constants.V_WIDTH / Constants.PPM, Constants.V_HEIGHT / Constants.PPM, gameCam);
 
 
-
-
         mapGenerator = new MapGenerator();
 
 
@@ -60,6 +53,10 @@ public class GameScreen implements Screen {
         player = new Player(100, 100, mapGenerator);
 
         renderer = new ScreenRenderer(player, mapGenerator, viewport, gameCam);
+
+
+        controllListener = new ControllListener(player, gameCam);
+        Gdx.input.setInputProcessor(controllListener);
 
     }
 

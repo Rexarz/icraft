@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.rexar.islandcraft.objects.Tree;
 import com.rexar.islandcraft.utils.AssetsManager;
 import com.rexar.islandcraft.utils.MapGenerator;
 
@@ -24,6 +23,7 @@ public class Player extends Sprite {
     private Animation<TextureRegion> playerIdleUp;
     private Animation<TextureRegion> playerIdleDown;
     private Animation<TextureRegion> playerIdleRight;
+    private Animation<TextureRegion> playerIdleLeft;
 
     private Animation<TextureRegion> playerRunRight;
     private Animation<TextureRegion> playerRunDown;
@@ -40,21 +40,26 @@ public class Player extends Sprite {
     private MapGenerator mapGenerator;
 
 
-    private final float VELOCITY = 0.2f;
+    private final float VELOCITY = 0.15f;
 
 
     private boolean canWalkUp = true;
     private boolean canWalkDown = true;
     private boolean canWalkLeft = true;
     private boolean canWalkRight = true;
+    private boolean running = false;
 
 
     private enum PlayerStates {
-        IDLE,
+        IDLE_D,
+        IDLE_U,
+        IDLE_R,
+        IDLE_L,
         RUNNING_R,
         RUNNING_L,
         RUNNING_U,
-        RUNNING_D
+        RUNNING_D,
+
     }
 
 
@@ -70,8 +75,8 @@ public class Player extends Sprite {
         setRegion(new TextureRegion(AssetsManager.sprites, 17, 17));
         setBounds(0f, 0f, 2f, 2f);
         setPosition(x, y);
-        currentState = PlayerStates.IDLE;
-        previousState = PlayerStates.IDLE;
+        currentState = PlayerStates.IDLE_D;
+        previousState = PlayerStates.IDLE_D;
 
         playerBounds = new Rectangle(0, 0, 17f / 100f, 17f / 100f);
 
@@ -122,12 +127,16 @@ public class Player extends Sprite {
 
     public void playerMovements() {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && canWalkRight) {
+            currentState = PlayerStates.RUNNING_R;
+            running = true;
             position.x += VELOCITY;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && canWalkLeft) {
             position.x -= VELOCITY;
+            running = true;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
+            currentState = PlayerStates.RUNNING_L;
             if (isFlipX()) {
 
             } else {
@@ -136,11 +145,18 @@ public class Player extends Sprite {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.UP) && canWalkUp) {
             position.y += VELOCITY;
+            running = true;
             setRegion(playerRunUp.getKeyFrame(stateTime, true));
+            currentState = PlayerStates.RUNNING_U;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && canWalkDown) {
             position.y -= VELOCITY;
+            running = true;
             setRegion(playerRunDown.getKeyFrame(stateTime, true));
+            currentState = PlayerStates.RUNNING_D;
+        } else {
+            running = false;
+            previousState = currentState;
         }
     }
 
@@ -154,6 +170,28 @@ public class Player extends Sprite {
 
         checkCollision();
         playerMovements();
+        getState();
+    }
+
+    private void getState() {
+
+        if ((currentState == PlayerStates.IDLE_R || previousState == PlayerStates.RUNNING_R) && !running) {
+            setRegion(playerIdleRight.getKeyFrame(stateTime, true));
+        }
+        if ((currentState == PlayerStates.IDLE_L || previousState == PlayerStates.RUNNING_L) && !running) {
+            setRegion(playerIdleRight.getKeyFrame(stateTime, true));
+            if (isFlipX()) {
+
+            } else {
+                flip(true, false);
+            }
+        }
+        if ((currentState == PlayerStates.IDLE_D || previousState == PlayerStates.RUNNING_D) && !running) {
+            setRegion(playerIdleDown.getKeyFrame(stateTime, true));
+        }
+        if ((currentState == PlayerStates.IDLE_U || previousState == PlayerStates.RUNNING_U) && !running) {
+            setRegion(playerIdleUp.getKeyFrame(stateTime, true));
+        }
     }
 
     private void checkCollision() {

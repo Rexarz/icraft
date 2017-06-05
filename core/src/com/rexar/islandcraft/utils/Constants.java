@@ -6,7 +6,7 @@ package com.rexar.islandcraft.utils;
 public class Constants {
     public final static float V_HEIGHT = 160f;
     public final static float V_WIDTH = V_HEIGHT * 16 / 9;
-    public final static float PPM = 3f;
+    public final static float PPM = 5f;
     public final static int MAP_SIZE = 512;
 
 }
