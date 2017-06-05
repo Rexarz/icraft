@@ -152,25 +152,49 @@ public class Player extends Sprite {
         setPosition(position.x, position.y);
 
 
+        checkCollision();
+        playerMovements();
+    }
+
+    private void checkCollision() {
+
         if (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] != 0) {
-            canWalkUp = false;
-        } else if (mapGenerator.objects[(int) position.x][(int) (position.y - 1)] != 0) {
-            canWalkDown = false;
-        } else if (mapGenerator.objects[(int) position.x + 1][(int) (position.y)] != 0) {
-            canWalkRight = false;
-        } else if (mapGenerator.objects[(int) position.x - 1][(int) (position.y)] != 0) {
-            canWalkLeft = false;
-        }else if (mapGenerator.objects[(int) position.x][(int) (position.y - 1)] == 0) {
-            canWalkDown = true;
-        } else if (mapGenerator.objects[(int) position.x + 1][(int) (position.y)] == 0) {
-            canWalkRight = true;
-        } else if (mapGenerator.objects[(int) position.x - 1][(int) (position.y)] == 0) {
-            canWalkLeft = true;
-        } else if (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] == 0) {
+            if (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] == 5)
+                canWalkUp = true;
+            else
+                canWalkUp = false;
+        } else {
             canWalkUp = true;
         }
 
-        playerMovements();
+        if (mapGenerator.objects[(int) position.x][(int) (position.y - 1)] != 0) {
+            if (mapGenerator.objects[(int) position.x][(int) (position.y - 1)] == 5)
+                canWalkDown = true;
+            else
+                canWalkDown = false;
+        } else {
+            canWalkDown = true;
+        }
+
+        if (mapGenerator.objects[(int) position.x + 1][(int) (position.y)] != 0) {
+            if (mapGenerator.objects[(int) position.x + 1][(int) (position.y)] == 5)
+                canWalkRight = true;
+            else
+                canWalkRight = false;
+        } else {
+            canWalkRight = true;
+        }
+
+        if (mapGenerator.objects[(int) position.x - 1][(int) (position.y)] != 0) {
+            if (mapGenerator.objects[(int) position.x - 1][(int) (position.y)] == 5)
+                canWalkLeft = true;
+            else
+                canWalkLeft = false;
+        } else {
+            canWalkLeft = true;
+        }
+
+
     }
 
 

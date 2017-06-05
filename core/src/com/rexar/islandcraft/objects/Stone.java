@@ -10,7 +10,7 @@ public class Stone extends NatureObjects {
         super(sprites, srcX, srcY, srcWidth, srcHeight, x, y);
 
         setPosition(x, y);
-        setBounds(0, 0, 2, 2);
+        setBounds(0, 0, 1, 1);
 
     }
 }
