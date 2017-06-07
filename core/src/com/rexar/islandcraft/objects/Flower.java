@@ -10,5 +10,6 @@ public class Flower extends NatureObjects {
         super(sprites, srcX, srcY, srcWidth, srcHeight, x, y);
         setPosition(x, y);
         setBounds(0,0,0.6f,0.3f);
+
     }
 }

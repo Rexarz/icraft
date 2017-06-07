@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
+import com.rexar.islandcraft.objects.NatureObjects;
+import com.rexar.islandcraft.objects.Tree;
 import com.rexar.islandcraft.utils.AssetsManager;
 import com.rexar.islandcraft.utils.MapGenerator;
 
@@ -34,13 +37,14 @@ public class Player extends Sprite {
     public Vector2 position;
     private PlayerStates currentState;
     private PlayerStates previousState;
+    private Direction currentDirection;
 
     private TextureRegion playerStay;
 
     private MapGenerator mapGenerator;
 
 
-    private final float VELOCITY = 0.15f;
+    private final float VELOCITY = 0.2f;
 
 
     private boolean canWalkUp = true;
@@ -49,6 +53,15 @@ public class Player extends Sprite {
     private boolean canWalkRight = true;
     private boolean running = false;
 
+    private float damage = 50f;
+    private float colorTime = 0;
+
+    private enum Direction {
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN
+    }
 
     private enum PlayerStates {
         IDLE_D,
@@ -77,6 +90,7 @@ public class Player extends Sprite {
         setPosition(x, y);
         currentState = PlayerStates.IDLE_D;
         previousState = PlayerStates.IDLE_D;
+        currentDirection = Direction.DOWN;
 
         playerBounds = new Rectangle(0, 0, 17f / 100f, 17f / 100f);
 
@@ -128,12 +142,13 @@ public class Player extends Sprite {
     public void playerMovements() {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && canWalkRight) {
             currentState = PlayerStates.RUNNING_R;
+            currentDirection = Direction.RIGHT;
             running = true;
             position.x += VELOCITY;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && canWalkLeft) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && canWalkLeft) {
             position.x -= VELOCITY;
+            currentDirection = Direction.LEFT;
             running = true;
             setRegion(playerRunRight.getKeyFrame(stateTime, true));
             currentState = PlayerStates.RUNNING_L;
@@ -142,15 +157,15 @@ public class Player extends Sprite {
             } else {
                 flip(true, false);
             }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) && canWalkUp) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP) && canWalkUp) {
             position.y += VELOCITY;
+            currentDirection = Direction.UP;
             running = true;
             setRegion(playerRunUp.getKeyFrame(stateTime, true));
             currentState = PlayerStates.RUNNING_U;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && canWalkDown) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && canWalkDown) {
             position.y -= VELOCITY;
+            currentDirection = Direction.DOWN;
             running = true;
             setRegion(playerRunDown.getKeyFrame(stateTime, true));
             currentState = PlayerStates.RUNNING_D;
@@ -158,9 +173,27 @@ public class Player extends Sprite {
             running = false;
             previousState = currentState;
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            try {
+                dealDamage();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+
+            this.setColor(1, 0, 0, 1);
+
+        }
     }
 
     public void update(float delta) {
+
+        if (colorTime > 0.5f) {
+            this.setColor(1, 1, 1, 1);
+        }
 
         playerBounds.setPosition(position);
 
@@ -196,8 +229,8 @@ public class Player extends Sprite {
 
     private void checkCollision() {
 
-        if (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] != 0) {
-            if (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] == 5)
+        if (mapGenerator.natureObjects[(int) position.x][(int) (position.y + 1)] != null) {
+            if ((mapGenerator.objects[(int) position.x][(int) (position.y + 1)] == 5) || (mapGenerator.objects[(int) position.x][(int) (position.y + 1)] == 6))
                 canWalkUp = true;
             else
                 canWalkUp = false;
@@ -235,5 +268,47 @@ public class Player extends Sprite {
 
     }
 
+
+    public void dealDamage() throws InterruptedException {
+
+        float delay = 0.5f;
+
+
+        switch (currentDirection) {
+            case UP: {
+                if (mapGenerator.natureObjects[(int) position.x][(int) position.y + 1] != null) {
+                    mapGenerator.natureObjects[(int) position.x][(int) position.y + 1].getDamage(damage);
+                    if (mapGenerator.natureObjects[(int) position.x][(int) position.y + 1].currentState == NatureObjects.NatureObjectStates.DEAD)
+                        mapGenerator.objects[(int) position.x][(int) position.y + 1] = 6;
+                }
+                break;
+            }
+            case DOWN: {
+                if (mapGenerator.natureObjects[(int) position.x][(int) position.y - 1] != null) {
+                    mapGenerator.natureObjects[(int) position.x][(int) position.y - 1].getDamage(damage);
+                    if (mapGenerator.natureObjects[(int) position.x][(int) position.y - 1].currentState == NatureObjects.NatureObjectStates.DEAD)
+                        mapGenerator.objects[(int) position.x][(int) position.y - 1] = 1;
+                }
+                break;
+            }
+            case RIGHT: {
+                if (mapGenerator.natureObjects[(int) position.x + 1][(int) position.y] != null) {
+                    mapGenerator.natureObjects[(int) position.x + 1][(int) position.y].getDamage(damage);
+                    if (mapGenerator.natureObjects[(int) position.x + 1][(int) position.y].currentState == NatureObjects.NatureObjectStates.DEAD)
+                        mapGenerator.objects[(int) position.x + 1][(int) position.y] = 1;
+                }
+                break;
+            }
+            case LEFT: {
+                if (mapGenerator.natureObjects[(int) position.x - 1][(int) position.y] != null) {
+                    mapGenerator.natureObjects[(int) position.x - 1][(int) position.y].getDamage(damage);
+                    if (mapGenerator.natureObjects[(int) position.x - 1][(int) position.y].currentState == NatureObjects.NatureObjectStates.DEAD)
+                        mapGenerator.objects[(int) position.x - 1][(int) position.y] = 1;
+                }
+                break;
+            }
+        }
+
+    }
 
 }

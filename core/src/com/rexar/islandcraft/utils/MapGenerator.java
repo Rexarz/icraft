@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.noise.NoiseGenerator;
 import com.github.czyzby.noise4j.map.generator.util.Generators;
-import com.rexar.islandcraft.objects.Flower;
-import com.rexar.islandcraft.objects.Stone;
-import com.rexar.islandcraft.objects.Tile;
-import com.rexar.islandcraft.objects.Tree;
+import com.rexar.islandcraft.objects.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +20,7 @@ public class MapGenerator {
 
 
     //    TREES
+    public NatureObjects[][] natureObjects;
     public List<Tree> treesType_0;
     public List<Tree> treesType_1;
 
@@ -48,6 +46,7 @@ public class MapGenerator {
 
 
 //        TREES
+        natureObjects = new NatureObjects[Constants.MAP_SIZE][Constants.MAP_SIZE];
         treesType_0 = new ArrayList<Tree>();
         treesType_1 = new ArrayList<Tree>();
 
@@ -71,6 +70,7 @@ public class MapGenerator {
             for (int j = 0; j < objects[i].length; j++) {
                 objects[i][j] = 0;
                 map[i][j] = 0;
+                natureObjects[i][j] = null;
             }
         }
 
@@ -128,6 +128,7 @@ public class MapGenerator {
                 Tree tree = new Tree(AssetsManager.sprites, 103, 1, 33, 33, x, y);
                 treesType_0.add(tree);
                 objects[x][y] = 1;
+                natureObjects[x][y] = tree;
                 objectsCounter++;
             }
         } else if (cell > 0.48f && cell < 0.50f) {
@@ -135,6 +136,7 @@ public class MapGenerator {
                 Tree tree = new Tree(AssetsManager.sprites, 103, 35, 33, 33, x, y);
                 treesType_1.add(tree);
                 objects[x][y] = 2;
+                natureObjects[x][y] = tree;
                 objectsCounter++;
             }
         } else if (cell > 0.65f) {
@@ -142,6 +144,7 @@ public class MapGenerator {
                 Stone stone = new Stone(AssetsManager.sprites, 137, 1, 10, 10, x, y);
                 stoneType_0.add(stone);
                 objects[x][y] = 3;
+                natureObjects[x][y] = stone;
                 objectsCounter++;
             } else if (rand < 0.3f) {
                 Stone stone = new Stone(AssetsManager.sprites, 154, 1, 10, 10, x, y);

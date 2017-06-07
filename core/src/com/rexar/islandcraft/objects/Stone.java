@@ -12,5 +12,8 @@ public class Stone extends NatureObjects {
         setPosition(x, y);
         setBounds(0, 0, 2f, 2f);
 
+        health = 250f;
+        currentState = NatureObjectStates.LIVE;
+
     }
 }

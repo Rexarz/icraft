@@ -1,16 +1,13 @@
 package com.rexar.islandcraft.objects;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.rexar.islandcraft.utils.AssetsManager;
 
 /**
  * Created by sergei.ivanishin on 6/2/2017.
  */
 public class Tree extends NatureObjects {
-
-    public static Rectangle rectangle;
 
 
     public Tree(Texture sprites, int srcX, int srcY, int srcWidth, int srcHeight, int x, int y) {
@@ -18,8 +15,18 @@ public class Tree extends NatureObjects {
         setPosition(x, y);
         setBounds(0, 0, 4, 4);
 
-        rectangle = this.getBoundingRectangle();
+
+        health = 100f;
+        currentState = NatureObjectStates.LIVE;
     }
 
 
+    @Override
+    public void getDamage(float damage) throws InterruptedException {
+        super.getDamage(damage);
+        if (currentState == NatureObjectStates.DEAD) {
+            setRegion(103, 69, 33, 33);
+//            setBounds(0, 0, 2, 2);
+        }
+    }
 }

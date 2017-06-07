@@ -94,19 +94,23 @@ public class ScreenRenderer {
 
 
                         if (mapGenerator.objects[j][i] == 1) {
-                            mapGenerator.treesType_0.get(treeType_0).setPosition(j, i);
-                            mapGenerator.treesType_0.get(treeType_0).draw(batch);
+                            mapGenerator.natureObjects[j][i].setPosition(j - 0.5f, i + 0.5f);
+                            mapGenerator.natureObjects[j][i].update();
+                            mapGenerator.natureObjects[j][i].draw(batch);
                             treeType_0++;
                         } else if (mapGenerator.objects[j][i] == 2) {
-                            mapGenerator.treesType_1.get(treeType_1).setPosition(j, i);
-                            mapGenerator.treesType_1.get(treeType_1).draw(batch);
+                            mapGenerator.natureObjects[j][i].setPosition(j - 0.5f, i);
+                            mapGenerator.natureObjects[j][i].update();
+                            mapGenerator.natureObjects[j][i].draw(batch);
                             treeType_1++;
                         } else if (mapGenerator.objects[j][i] == 3) {
                             mapGenerator.stoneType_0.get(stoneType_0).setPosition(j, i);
+                            mapGenerator.natureObjects[j][i].update();
                             mapGenerator.stoneType_0.get(stoneType_0).draw(batch);
                             stoneType_0++;
                         } else if (mapGenerator.objects[j][i] == 4) {
                             mapGenerator.stoneType_1.get(stoneType_1).setPosition(j, i);
+                            mapGenerator.natureObjects[j][i].update();
                             mapGenerator.stoneType_1.get(stoneType_1).draw(batch);
                             stoneType_1++;
                         } else if (mapGenerator.objects[j][i] == 5) {
@@ -130,12 +134,16 @@ public class ScreenRenderer {
 
 
                         if (mapGenerator.objects[j][i] == 1) {
-                            mapGenerator.treesType_0.get(treeType_0).setPosition(j, i);
-                            mapGenerator.treesType_0.get(treeType_0).draw(batch);
+//                            mapGenerator.treesType_0.get(treeType_0).setPosition(j, i);
+//                            mapGenerator.treesType_0.get(treeType_0).draw(batch);
+                            mapGenerator.natureObjects[j][i].setPosition(j - 0.5f, i + 0.5f);
+                            mapGenerator.natureObjects[j][i].update();
+                            mapGenerator.natureObjects[j][i].draw(batch);
                             treeType_0++;
                         } else if (mapGenerator.objects[j][i] == 2) {
-                            mapGenerator.treesType_1.get(treeType_1).setPosition(j, i);
-                            mapGenerator.treesType_1.get(treeType_1).draw(batch);
+                            mapGenerator.natureObjects[j][i].setPosition(j - 0.5f, i);
+                            mapGenerator.natureObjects[j][i].update();
+                            mapGenerator.natureObjects[j][i].draw(batch);
                             treeType_1++;
                         } else if (mapGenerator.objects[j][i] == 3) {
                             mapGenerator.stoneType_0.get(stoneType_0).setPosition(j, i);
