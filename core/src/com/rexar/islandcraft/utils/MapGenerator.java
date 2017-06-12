@@ -124,38 +124,21 @@ public class MapGenerator {
     }
 
     private Ground checkBorders(int x, int y, float rand) {
-        boolean downBorder = true;
-        boolean upBorder = true;
-        boolean leftBorder = true;
-        boolean rightBorder = true;
         Ground result = null;
+        if (grid.get(x, y) != 0) {
+            if (grid.get(x, y - 1) == 0) {
+                if (grid.get(x - 1, ys) == 0) {
+                    result = new Ground(AssetsManager.sprites, 77, 18, 8, 8, x, y);
+                    result.flip(false, true);
+                } else {
+                    result = new Ground(AssetsManager.sprites, 69, 18, 8, 8, x, y);
+                    result.rotate90(true);
+                    result.rotate90(true);
+                    result.rotate90(true);
+                }
 
-        if (grid.get(x + 1, y) == 0) {
-            rightBorder = false;
+            }
         }
-        if (grid.get(x - 1, y) == 0) {
-            leftBorder = false;
-        }
-        if (grid.get(x, y + 1) == 0) {
-            downBorder = false;
-        }
-        if (grid.get(x, y - 1) == 0) {
-            upBorder = false;
-        }
-        if (!upBorder){
-            result = new Ground(AssetsManager.sprites, 69, 18, 8, 8, x, y);
-            System.out.println("+");
-            result.rotate90(true);
-        }
-
-//        if (!upBorder && !rightBorder && !leftBorder && !downBorder) {
-//            result = new Ground(AssetsManager.sprites, 77, 26, 8, 8, x, y);
-//        } else if (!leftBorder && !upBorder) {
-//            result = new Ground(AssetsManager.sprites, 77, 26, 8, 8, x, y);
-//            System.out.println("+");
-//        } else if (!leftBorder) {
-//            result = new Ground(AssetsManager.sprites, 69, 18, 8, 8, x, y);
-//        }
 
         return result;
 
