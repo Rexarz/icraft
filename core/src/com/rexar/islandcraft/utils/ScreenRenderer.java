@@ -65,21 +65,36 @@ public class ScreenRenderer {
                 if (j >= 0 && j <= mapGenerator.grid.getWidth() && i >= 0 && i <= mapGenerator.grid.getHeight() && mapGenerator.grid.get(j, i) > 0f) {
 
                     if (mapGenerator.map[j][i] > 0.65f) {
-                        mapGenerator.grounds.get(groundType_0).setPosition(j, i);
-                        mapGenerator.grounds.get(groundType_0).setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 1);
-                        mapGenerator.grounds.get(groundType_0).draw(batch);
-                        groundType_0++;
+                        mapGenerator.ground[j][i].setPosition(j, i);
+                        mapGenerator.ground[j][i].setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 1);
+                        mapGenerator.ground[j][i].draw(batch);
                     } else if (mapGenerator.map[j][i] > 0.48f) {
-                        mapGenerator.grounds.get(groundType_0).setPosition(j, i);
-                        mapGenerator.grounds.get(groundType_0).setColor(0, mapGenerator.grid.get(j, i), 0, 1);
-                        mapGenerator.grounds.get(groundType_0).draw(batch);
-                        groundType_0++;
+                        mapGenerator.ground[j][i].setPosition(j, i);
+                        mapGenerator.ground[j][i].setColor(0, mapGenerator.grid.get(j, i), 0, 1);
+                        mapGenerator.ground[j][i].draw(batch);
                     } else if (mapGenerator.map[j][i] > 0.1f) {
-                        mapGenerator.grounds.get(groundType_0).setPosition(j, i);
-                        mapGenerator.grounds.get(groundType_0).setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 0, 1);
-                        mapGenerator.grounds.get(groundType_0).draw(batch);
-                        groundType_0++;
+                        mapGenerator.ground[j][i].setPosition(j, i);
+                        mapGenerator.ground[j][i].setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 0, 1);
+                        mapGenerator.ground[j][i].draw(batch);
                     }
+
+
+//                    if (mapGenerator.map[j][i] > 0.65f) {
+//                        mapGenerator.grounds.get(groundType_0).setPosition(j, i);
+//                        mapGenerator.grounds.get(groundType_0).setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 1);
+//                        mapGenerator.grounds.get(groundType_0).draw(batch);
+//                        groundType_0++;
+//                    } else if (mapGenerator.map[j][i] > 0.48f) {
+//                        mapGenerator.grounds.get(groundType_0).setPosition(j, i);
+//                        mapGenerator.grounds.get(groundType_0).setColor(0, mapGenerator.grid.get(j, i), 0, 1);
+//                        mapGenerator.grounds.get(groundType_0).draw(batch);
+//                        groundType_0++;
+//                    } else if (mapGenerator.map[j][i] > 0.1f) {
+//                        mapGenerator.grounds.get(groundType_0).setPosition(j, i);
+//                        mapGenerator.grounds.get(groundType_0).setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 0, 1);
+//                        mapGenerator.grounds.get(groundType_0).draw(batch);
+//                        groundType_0++;
+//                    }
                 }
             }
         }
@@ -109,10 +124,10 @@ public class ScreenRenderer {
                             mapGenerator.stoneType_0.get(stoneType_0).draw(batch);
                             stoneType_0++;
                         } else if (mapGenerator.objects[j][i] == 4) {
-                            mapGenerator.stoneType_1.get(stoneType_1).setPosition(j, i);
-                            mapGenerator.natureObjects[j][i].update();
-                            mapGenerator.stoneType_1.get(stoneType_1).draw(batch);
-                            stoneType_1++;
+//                            mapGenerator.stoneType_1.get(stoneType_1).setPosition(j, i);
+//                            mapGenerator.natureObjects[j][i].update();
+//                            mapGenerator.stoneType_1.get(stoneType_1).draw(batch);
+//                            stoneType_1++;
                         } else if (mapGenerator.objects[j][i] == 5) {
                             mapGenerator.flowerType_0.get(flowerType_0).setPosition(j, i);
                             mapGenerator.flowerType_0.get(flowerType_0).draw(batch);

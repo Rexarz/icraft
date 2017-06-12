@@ -31,6 +31,9 @@ public class MapGenerator {
     //    FLOWERS
     public List<Flower> flowerType_0;
 
+    //    GROUND
+    public Ground[][] ground;
+
 
     public Grid grid;
     public float[][] map;
@@ -43,6 +46,7 @@ public class MapGenerator {
     public MapGenerator() {
 //        GROUND
         grounds = new ArrayList<Tile>();
+        ground = new Ground[Constants.MAP_SIZE][Constants.MAP_SIZE];
 
 
 //        TREES
@@ -71,6 +75,7 @@ public class MapGenerator {
                 objects[i][j] = 0;
                 map[i][j] = 0;
                 natureObjects[i][j] = null;
+                ground[i][j] = null;
             }
         }
 
@@ -109,15 +114,62 @@ public class MapGenerator {
     private void generateGround(int x, int y) {
         float rand = random.nextFloat();
         final float cell = grid.get(x, y);
-        Tile tile = null;
-        if (rand > 0.6f) {
-            tile = new Tile(AssetsManager.sprites, 69, 1, 8, 8, x, y);
-        } else if (rand > 0.3f) {
-            tile = new Tile(AssetsManager.sprites, 77, 1, 8, 8, x, y);
-        } else if (rand > 0f) {
-            tile = new Tile(AssetsManager.sprites, 69, 9, 8, 8, x, y);
+        Ground newGround = null;
+
+        newGround = checkBorders(x, y, rand);
+        if (newGround == null) {
+            newGround = generateCommonGround(x, y, rand, newGround);
         }
-        grounds.add(tile);
+        ground[x][y] = newGround;
+    }
+
+    private Ground checkBorders(int x, int y, float rand) {
+        boolean downBorder = true;
+        boolean upBorder = true;
+        boolean leftBorder = true;
+        boolean rightBorder = true;
+        Ground result = null;
+
+        if (grid.get(x + 1, y) == 0) {
+            rightBorder = false;
+        }
+        if (grid.get(x - 1, y) == 0) {
+            leftBorder = false;
+        }
+        if (grid.get(x, y + 1) == 0) {
+            downBorder = false;
+        }
+        if (grid.get(x, y - 1) == 0) {
+            upBorder = false;
+        }
+        if (!upBorder){
+            result = new Ground(AssetsManager.sprites, 69, 18, 8, 8, x, y);
+            System.out.println("+");
+            result.rotate90(true);
+        }
+
+//        if (!upBorder && !rightBorder && !leftBorder && !downBorder) {
+//            result = new Ground(AssetsManager.sprites, 77, 26, 8, 8, x, y);
+//        } else if (!leftBorder && !upBorder) {
+//            result = new Ground(AssetsManager.sprites, 77, 26, 8, 8, x, y);
+//            System.out.println("+");
+//        } else if (!leftBorder) {
+//            result = new Ground(AssetsManager.sprites, 69, 18, 8, 8, x, y);
+//        }
+
+        return result;
+
+    }
+
+    private Ground generateCommonGround(int x, int y, float rand, Ground newGround) {
+        if (rand > 0.6f) {
+            newGround = new Ground(AssetsManager.sprites, 69, 1, 8, 8, x, y);
+        } else if (rand > 0.3f) {
+            newGround = new Ground(AssetsManager.sprites, 77, 1, 8, 8, x, y);
+        } else if (rand > 0f) {
+            newGround = new Ground(AssetsManager.sprites, 69, 9, 8, 8, x, y);
+        }
+        return newGround;
     }
 
     private void generateForest(int x, int y) {
