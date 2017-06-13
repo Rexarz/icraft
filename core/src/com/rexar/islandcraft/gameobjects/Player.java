@@ -187,6 +187,13 @@ public class Player extends Sprite {
             this.setColor(1, 0, 0, 1);
 
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.H)) {
+
+            System.out.println(position);
+            System.out.println(mapGenerator.grid.get((int) position.x + 1, (int) position.y));
+
+        }
+
     }
 
     public void update(float delta) {

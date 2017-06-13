@@ -92,6 +92,7 @@ public class MapGenerator {
             for (int y = 0; y < grid.getHeight(); y++) {
                 final float cell = grid.get(x, y);
                 if (cell > 0.3f + (0.4f * distanceSquared(x, y, grid))) {
+                    System.out.print(cell);
                     map[x][y] = cell;
                     generateGround(x, y);
                     generateForest(x, y);
@@ -100,6 +101,7 @@ public class MapGenerator {
                     map[x][y] = 0f;
                 }
             }
+            System.out.println();
         }
 
         Gdx.app.log("Map", "Map generation done successfully");
@@ -125,18 +127,45 @@ public class MapGenerator {
 
     private Ground checkBorders(int x, int y, float rand) {
         Ground result = null;
-        if (grid.get(x, y) != 0) {
-            if (grid.get(x, y - 1) == 0) {
-                if (grid.get(x - 1, ys) == 0) {
-                    result = new Ground(AssetsManager.sprites, 77, 18, 8, 8, x, y);
-                    result.flip(false, true);
-                } else {
-                    result = new Ground(AssetsManager.sprites, 69, 18, 8, 8, x, y);
-                    result.rotate90(true);
-                    result.rotate90(true);
-                    result.rotate90(true);
-                }
+        boolean upBorder = true;
+        boolean downBorder = true;
+        boolean leftBorder = true;
+        boolean rightBorder = true;
 
+        if (grid.get(x, y - 1) == 0) {
+            downBorder = false;
+        }
+        if (grid.get(x, y + 1) == 0) {
+            upBorder = false;
+        }
+//        if (grid.get(x + 1, y) == 0) {
+//            rightBorder = false;
+//            System.out.println("+");
+//
+//        }
+        if (grid.get(x + 1, y) == 0f) {
+            System.out.print("x - " + x + " ");
+            System.out.print("y - " + y + " ");
+            System.out.println();
+        }
+
+//        if (grid.get(x - 1, y) == 0) {
+//            System.out.println(map[x][y] + "current x and y");
+//            System.out.println(map[x - 1][y] + "next x");
+//            rightBorder = false;
+//        }
+        if (grid.get(x - 1, y) == 0) {
+            leftBorder = false;
+        }
+        if (grid.get(x, y) != 0) {
+//            if (!leftBorder && !downBorder) {
+//                result = new Ground(AssetsManager.sprites, 77, 18, 8, 8, x, y);
+//                result.flip(false, true);
+//            }
+            if (!rightBorder) {
+                result = new Ground(AssetsManager.sprites, 77, 18, 8, 8, x, y);
+                result.flip(true, false);
+                result.rotate90(true);
             }
         }
 

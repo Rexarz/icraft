@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.czyzby.noise4j.map.Grid;
 import com.rexar.islandcraft.gameobjects.Player;
+import com.rexar.islandcraft.objects.Ground;
 
 import java.util.List;
 import java.util.Random;
@@ -73,6 +74,8 @@ public class ScreenRenderer {
                         mapGenerator.ground[j][i].setColor(0, mapGenerator.grid.get(j, i), 0, 1);
                         mapGenerator.ground[j][i].draw(batch);
                     } else if (mapGenerator.map[j][i] > 0.1f) {
+//                        newGround = new Ground(AssetsManager.sprites, 86, 1, 8, 8, x, y);
+                        mapGenerator.ground[j][i].setRegion(86, 1, 8, 8);
                         mapGenerator.ground[j][i].setPosition(j, i);
                         mapGenerator.ground[j][i].setColor(mapGenerator.grid.get(j, i), mapGenerator.grid.get(j, i), 0, 1);
                         mapGenerator.ground[j][i].draw(batch);

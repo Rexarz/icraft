@@ -10,7 +10,7 @@ public class Stone extends NatureObjects {
         super(sprites, srcX, srcY, srcWidth, srcHeight, x, y);
 
         setPosition(x, y);
-        setBounds(0, 0, 2f, 2f);
+        setBounds(0, 0, 1f, 1f);
 
         health = 250f;
         currentState = NatureObjectStates.LIVE;
